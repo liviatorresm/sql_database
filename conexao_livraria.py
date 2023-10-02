@@ -4,8 +4,8 @@ from contextlib import contextmanager
 parametros = dict(
     host='localhost',
     port=5432,
-    user='livia',
-    password='livia',
+    user='user',
+    password='pass',
     database='livraria'
 )
 
