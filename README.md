@@ -15,7 +15,7 @@ Com isso em mente, busquei seguir de perto o [PEP 249](https://peps.python.org/p
 ### 3.1 Requisitos necessários
 
 * **Instalação do pacote Psycopg**
-    O Psycopg [(documentação aqui)](https://www.psycopg.org/docs/index.html) é um adaptador de banco de dados PostgreSQL para APIs construídas com a linguagem Python. Um adaptador é um componente que permite a comunicação de um aplicativo com um SGBD, o intuito é  facilitar a troca de informações e operações, sem a necessidade de mudar de ambientes.
+    O [Psycopg](https://www.psycopg.org/docs/index.html) é um adaptador de banco de dados PostgreSQL para APIs construídas com a linguagem Python. Um adaptador é um componente que permite a comunicação de um aplicativo com um SGBD, o intuito é  facilitar a troca de informações e operações, sem a necessidade de mudar de ambientes.
 
     A instalação se dá como qualquer outro pacote python, através do pip.
 
@@ -25,7 +25,9 @@ Com isso em mente, busquei seguir de perto o [PEP 249](https://peps.python.org/p
 
 ### 3.2 Configurar acesso ao banco de dados
 
-Aqui, criamos um arquivo Python que armazenará os requisitos necessários para a conexão com o banco de dados. Esse arquivo tem o propósito de evitar a repetição de código toda vez que houver a necessidade de interagir com o banco de dados. Além disso, ele garante que a conexão seja fechada adequadamente e que os recursos sejam liberados de forma eficaz.
+Aqui, criamos um arquivo Python que armazenará os requisitos necessários para a conexão com o banco de dados. Esse [arquivo](conexao_livraria.py) tem o propósito de evitar a repetição de código toda vez que houver a necessidade de interagir com o banco de dados. Além disso, ele garante que a conexão seja fechada adequadamente e que os recursos sejam liberados de forma eficaz.
+
+Note que eu utilizei o pacote python-dotenv para salvar dados sensíveis como senhas e informações de ambiente. Leia mais informações na [documentação](https://pypi.org/project/python-dotenv/). De toda forma um [exemplo de arquivo .env](.env-example) pode ser encontrado nesse diretório.
 
 * **Começamos importando pacotes necessário**
 
@@ -41,12 +43,12 @@ Aqui, criamos um arquivo Python que armazenará os requisitos necessários para 
 
     ```
     parametros = dict(
-        host='localhost',
-        port=5432,
-        user='user',
-        password='senha',
-        database='nome_do_banco'
-    )
+    host=os.getenv("DB_HOST"),
+    port=os.getenv("DB_PORT"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASS"),
+    database=os.getenv("DB_NAME")
+)
     ```
    Você pode estar se perguntando: Por que é necessário passar o nome do banco de dados para o método? Não posso simplesmente me conectar ao PostgreSQL e executar o script "CREATE DATABASE..."?
 
@@ -72,6 +74,8 @@ Aqui, criamos um arquivo Python que armazenará os requisitos necessários para 
 ### 3.3 Tudo pronto!
 
 #### 3.3.1 Vamos iniciar nossa interação com o banco de dados criando uma tabela
+
+Agora que já definimos a conexão podemos iniciar a interação com o banco [criando uma tabela](criar_tabela_livro.py) da seguinte forma:
 
 * **Primeiro importamos os pacotes necessários e nosso módulo de conexão**
 
@@ -116,6 +120,8 @@ Aqui, criamos um arquivo Python que armazenará os requisitos necessários para 
 
 #### 3.3.2 Agora vamos inserir algumas informações na nossa tabela
 
+Com a tabela disponível podemos [inserir alguns dados](inserindo_dados_livros.py).
+
 * **Vamos salvar o script na variável**
 
     ```
@@ -158,6 +164,8 @@ Aqui, criamos um arquivo Python que armazenará os requisitos necessários para 
 
 #### 3.3.4 Primeiros select
 
+[Para projetar os dados usamos](select_livros.py) o módulo fetchall que retorna uma lista de tuplas, onde cada tupla é uma linha da tabela.
+
 ```
 from psycopg2.errors import ProgrammingError
 from conexao_livraria import nova_conexao
@@ -185,9 +193,9 @@ O output será uma lista de tuplas:
 [('João Nunes', 'M', 'SP'), ('Eduardo Santos', 'M', 'RJ'), ('Eduardo Santos', 'M', 'RJ')]
 ```
 
-#### 3.3.5 Armazenando resultados de um select como data frame com pandas
+#### 3.3.5 Armazenando resultados de um select como dataframe com pandas
 
-Também é possível enviar suas consultas SQL para a biblioteca pandas, o que elimina a necessidade de criar arquivos intermediários para iniciar suas análises.
+Também é possível [enviar suas consultas SQL para a biblioteca pandas](select_pandas.py), o que elimina a necessidade de criar arquivos intermediários para iniciar suas análises.
 
 ```
 from psycopg2.errors import ProgrammingError
