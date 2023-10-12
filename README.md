@@ -48,11 +48,10 @@ Note que eu utilizei o pacote python-dotenv para salvar dados sensíveis como se
     user=os.getenv("DB_USER"),
     password=os.getenv("DB_PASS"),
     database=os.getenv("DB_NAME")
-)
     ```
    Você pode estar se perguntando: Por que é necessário passar o nome do banco de dados para o método? Não posso simplesmente me conectar ao PostgreSQL e executar o script "CREATE DATABASE..."?
 
-    A resposta é que o PostgreSQL não permite a criação de bancos de dados dentro de um bloco de transação. Portanto, a criação do banco de dados deve ser feita usando a linha de comando psql ou alguma interface gráfica de usuário específica para essa finalidade.
+  A resposta é que o PostgreSQL não permite a criação de bancos de dados dentro de um bloco de transação. Portanto, a criação do banco de dados deve ser feita usando a linha de comando psql ou alguma interface gráfica de usuário         específica para essa finalidade.
 
 * **Em seguida criamos um decorator com o contextmanager**
 
